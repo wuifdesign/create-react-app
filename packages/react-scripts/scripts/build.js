@@ -38,11 +38,14 @@ const printBuildError = require('react-dev-utils/printBuildError');
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
+const printEntrySizesAfterBuild =
+  require('../_refined/utils/EntrySizeReporter').printEntrySizesAfterBuild;
 const useYarn = fs.existsSync(paths.yarnLockFile);
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
+const WARN_AFTER_ENTRY_GZIP_SIZE = 244 * 1024;
 
 const isInteractive = process.stdout.isTTY;
 
@@ -101,6 +104,15 @@ checkBrowsers(paths.appPath, isInteractive)
         paths.appBuild,
         WARN_AFTER_BUNDLE_GZIP_SIZE,
         WARN_AFTER_CHUNK_GZIP_SIZE
+      );
+      console.log();
+
+      console.log('Entrypoint sizes after gzip:\n');
+      printEntrySizesAfterBuild(
+        stats,
+        previousFileSizes,
+        paths.appBuild,
+        WARN_AFTER_ENTRY_GZIP_SIZE
       );
       console.log();
 
