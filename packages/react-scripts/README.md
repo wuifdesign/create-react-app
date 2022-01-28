@@ -22,6 +22,14 @@ npx create-react-app my-app --scripts-version react-scripts-refined
 npx create-react-app my-app --template typescript --scripts-version react-scripts-refined
 ```
 
+### Use with Typescript
+
+You need to update the default `src/react-app-env.d.ts` to use `react-scripts-refined` instead of `react-scripts`.
+
+```
+/// <reference types="react-scripts-refined" />
+```
+
 ### Config with `<root>/react-scripts-refined.config.js`
 
 ```js
