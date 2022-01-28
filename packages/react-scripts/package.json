@@ -1,6 +1,6 @@
 {
   "name": "react-scripts-refined",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Enhanced configuration and scripts for Create React App.",
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
     "url": "https://github.com/wuifdesign/create-react-app-refined/issues"
   },
   "files": [
+    "_refined",
     "bin",
     "config",
     "lib",
