@@ -80,16 +80,26 @@ function refinedWebpack(webpackConfig, { env, paths }) {
   webpackConfig.output.filename = isEnvProduction
     ? 'static/js/[name].[contenthash:8].js'
     : isEnvDevelopment && 'static/js/[name].js';
+
   webpackConfig.plugins = refinedPlugins(
     webpackConfig.plugins,
     mergedConfig,
     additionalParams
   ).filter(Boolean);
-  webpackConfig.module.rules[1].oneOf = refinedRules(
-    webpackConfig.module.rules[1].oneOf,
+
+  const oneOfRule = webpackConfig.module.rules.find(rule => rule.oneOf);
+  if (!oneOfRule) {
+    throw new Error(
+      `Can't find a 'oneOf' rule under module.rules in the ${env} webpack config!`,
+      'webpack+rules+oneOf'
+    );
+  }
+  oneOfRule.oneOf = refinedRules(
+    oneOfRule.oneOf,
     mergedConfig,
     additionalParams
   ).filter(Boolean);
+
   webpackConfig.optimization = {
     ...webpackConfig.optimization,
     ...mergedConfig.webpack.optimization,
