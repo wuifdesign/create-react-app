@@ -6,7 +6,6 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const DuplicatePackageCheckerPlugin = require('@cerner/duplicate-package-checker-webpack-plugin');
 const licenseCheckerOutputWriter = require('./licenseCheckerOutputWriter');
 const LicenseCheckerWebpackPlugin = require('license-checker-webpack-plugin');
-const WebpackBarPlugin = require('webpackbar');
 
 const refinedPlugins = (plugins, config, { env }) => {
   const isEnvProduction = env === 'production';
@@ -27,7 +26,6 @@ const refinedPlugins = (plugins, config, { env }) => {
         emitError: true,
         ...config.settings.licenseChecker,
       }),
-    new WebpackBarPlugin(),
     new DuplicatePackageCheckerPlugin({
       alwaysEmitErrorsFor: ['react', 'react-router'],
     }),

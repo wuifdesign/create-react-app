@@ -3,13 +3,12 @@
 **Based on `react-scripts@5.0.0`**
 
 - Added `less-loader`
-- Added report of entry size after build
+- Added report of build time and entry size after build
 - Added following webpack plugins
   - BundleAnalyzerPlugin
   - CircularDependencyPlugin
   - DuplicatePackageCheckerPlugin
   - LicenseCheckerWebpackPlugin
-  - WebpackBarPlugin
 - Added functionality to extend webpack plugins and rules
 - Added split config für vendor chunk (including all files from node_modules)
 

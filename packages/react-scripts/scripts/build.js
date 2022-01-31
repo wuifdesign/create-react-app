@@ -38,8 +38,8 @@ const printBuildError = require('react-dev-utils/printBuildError');
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
-const printEntrySizesAfterBuild =
-  require('../_refined/utils/EntrySizeReporter').printEntrySizesAfterBuild;
+const printBuildTimeAfterBuild = require('../_refined/utils/BuildTimeReporter');
+const printEntrySizesAfterBuild = require('../_refined/utils/EntrySizeReporter');
 const useYarn = fs.existsSync(paths.yarnLockFile);
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
@@ -80,8 +80,9 @@ checkBrowsers(paths.appPath, isInteractive)
   })
   .then(
     ({ stats, previousFileSizes, warnings }) => {
+      printBuildTimeAfterBuild(stats);
       if (warnings.length) {
-        console.log(chalk.yellow('Compiled with warnings.\n'));
+        // console.log(chalk.yellow('Compiled with warnings.\n'));
         console.log(warnings.join('\n\n'));
         console.log(
           '\nSearch for the ' +
@@ -94,7 +95,7 @@ checkBrowsers(paths.appPath, isInteractive)
             ' to the line before.\n'
         );
       } else {
-        console.log(chalk.green('Compiled successfully.\n'));
+        // console.log(chalk.green('Compiled successfully.\n'));
       }
 
       console.log('File sizes after gzip:\n');
