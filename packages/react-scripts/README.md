@@ -44,7 +44,7 @@ module.exports = ({ env, isEnvProduction, isEnvDevelopment, paths }) => ({
     },
     /**
      * Settings for the 'less-loader' rule.
-     * See https://lesscss.org/usage/#using-less-in-the-browser-setting-options for info about options.
+     * See https://webpack.js.org/loaders/less-loader for info about options.
      */
     lessLoader: {},
   },
