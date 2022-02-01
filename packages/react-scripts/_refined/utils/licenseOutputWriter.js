@@ -1,13 +1,15 @@
 'use strict';
 
 const licenseOutputWriter = modules => {
-  const licences = modules.reduce(
-    (prev, { licenseId, name }) => ({
-      ...prev,
-      [licenseId]: [...(prev[licenseId] || []), name],
-    }),
-    {}
-  );
+  const licences = modules
+    .filter(({ name }) => !!name)
+    .reduce(
+      (prev, { licenseId, name }) => ({
+        ...prev,
+        [licenseId]: [...(prev[licenseId] || []), name],
+      }),
+      {}
+    );
 
   const sortedLicences = Object.fromEntries(
     Object.entries(licences).sort(([, a], [, b]) => b.length - a.length)

@@ -55,7 +55,7 @@ module.exports = ({ env, isEnvProduction, isEnvDevelopment, paths }) => ({
   },
   webpack: {
     /**
-     * Define Webpack reolve.alias here.
+     * Define Webpack "resolve.alias" here.
      * https://webpack.js.org/configuration/resolve/#resolvealias
      */
     alias: {},

@@ -6,6 +6,7 @@ const BundleAnalyzerPlugin =
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const DuplicatePackageCheckerPlugin = require('@cerner/duplicate-package-checker-webpack-plugin');
 const licenseOutputWriter = require('./licenseOutputWriter');
+const satisfies = require('spdx-satisfies');
 const LicenseWebpackPlugin =
   require('license-webpack-plugin').LicenseWebpackPlugin;
 
@@ -37,10 +38,23 @@ const refinedPlugins = (plugins, config, { env }) => {
           );
         },
         handleMissingLicenseType: packageName => {
-          throw Error(chalk.red(`No license found for ${packageName}.`));
+          if (packageName) {
+            throw Error(chalk.red(`No license found for ${packageName}.`));
+          }
         },
         renderLicenses: licenseOutputWriter,
         ...config.settings.licensePlugin,
+        unacceptableLicenseTest: licenseType => {
+          if (
+            licenseType &&
+            config.settings.licensePlugin.unacceptableLicenseTest
+          ) {
+            return config.settings.licensePlugin.unacceptableLicenseTest(
+              licenseType
+            );
+          }
+          return false;
+        },
       }),
     new DuplicatePackageCheckerPlugin({
       alwaysEmitErrorsFor: ['react', 'react-router'],
