@@ -1,11 +1,11 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var chalk = require('chalk');
-var filesize = require('filesize');
-var stripAnsi = require('strip-ansi');
-var gzipSize = require('gzip-size').sync;
+const fs = require('fs');
+const path = require('path');
+const chalk = require('chalk');
+const filesize = require('filesize');
+const stripAnsi = require('strip-ansi');
+const gzipSize = require('gzip-size').sync;
 
 function canReadAsset(asset) {
   return (

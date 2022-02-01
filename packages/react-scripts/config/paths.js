@@ -109,7 +109,7 @@ module.exports = {
   ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
   appTypeDeclarations: resolveApp('src/react-app-env.d.ts'),
   ownTypeDeclarations: resolveOwn('lib/react-app.d.ts'),
-  reactScriptsRefinedConfig: resolveOwn('react-scripts-refined.config.js'),
+  reactScriptsRefinedConfig: resolveApp('react-scripts-refined.config.js'),
 };
 
 const ownPackageJson = require('../package.json');

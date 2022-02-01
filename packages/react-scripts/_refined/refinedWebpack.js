@@ -3,66 +3,73 @@
 const paths = require('../config/paths');
 const refinedRules = require('./utils/refinedRules');
 const refinedPlugins = require('./utils/refinedPlugins');
-const merge = require('merge-deep');
+const merge = require('deepmerge');
+const satisfies = require('spdx-satisfies');
 
 const config = (() => {
   try {
     return require(paths.reactScriptsRefinedConfig);
   } catch (e) {
-    return () => ({});
+    if (e.code === 'MODULE_NOT_FOUND') {
+      return () => ({});
+    }
+    throw e;
   }
 })();
+
+const defaultConfig = {
+  settings: {
+    licensePlugin: {
+      unacceptableLicenseTest: licenseType =>
+        !satisfies(
+          licenseType,
+          '(Apache-2.0 OR BSD-2-Clause OR BSD-3-Clause OR MIT)'
+        ),
+    },
+    lessLoader: {
+      lessOptions: {
+        javascriptEnabled: true,
+      },
+    },
+  },
+  webpack: {
+    alias: {},
+    rules: [],
+    plugins: {
+      remove: ['2'],
+      add: [],
+    },
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/i,
+            name: 'vendors',
+            chunks: 'initial',
+            reuseExistingChunk: true,
+            priority: -10,
+          },
+          vendorCss: {
+            test: /#vendors$/i,
+            type: 'css/mini-extract',
+            name: 'vendors',
+            chunks: 'initial',
+            priority: 10,
+            enforce: true,
+          },
+        },
+      },
+    },
+    configure(webpackConfig) {
+      return webpackConfig;
+    },
+  },
+};
 
 function getConfig({ env, paths }) {
   const argv = process.argv.slice(2);
   const userConfig = config({ env, paths });
-
-  const mergedConfig = merge(
-    {
-      settings: {
-        licenseChecker: {
-          allow: '(Apache-2.0 OR BSD-2-Clause OR BSD-3-Clause OR MIT)',
-        },
-        lessLoader: {
-          lessOptions: {
-            javascriptEnabled: true,
-          },
-        },
-      },
-      webpack: {
-        rules: [],
-        plugins: {
-          remove: [],
-          add: [],
-        },
-        optimization: {
-          splitChunks: {
-            cacheGroups: {
-              vendor: {
-                test: /[\\/]node_modules[\\/]/i,
-                name: 'vendors',
-                chunks: 'initial',
-                reuseExistingChunk: true,
-                priority: -10,
-              },
-              vendorCss: {
-                test: /#vendors$/i,
-                type: 'css/mini-extract',
-                name: 'vendors',
-                chunks: 'initial',
-                priority: 10,
-                enforce: true,
-              },
-            },
-          },
-        },
-        configure(webpackConfig) {
-          return webpackConfig;
-        },
-      },
-    },
-    userConfig
-  );
+  const mergedConfig = merge(defaultConfig, userConfig);
 
   if (argv.indexOf('--analyze') === -1) {
     mergedConfig.webpack.plugins.remove.push('BundleAnalyzerPlugin');
@@ -103,6 +110,11 @@ function refinedWebpack(webpackConfig, { env, paths }) {
   webpackConfig.optimization = {
     ...webpackConfig.optimization,
     ...mergedConfig.webpack.optimization,
+  };
+
+  webpackConfig.resolve.alias = {
+    ...webpackConfig.resolve.alias,
+    ...mergedConfig.webpack.alias,
   };
 
   return mergedConfig.webpack.configure(webpackConfig);

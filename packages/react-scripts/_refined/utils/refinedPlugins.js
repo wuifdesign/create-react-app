@@ -1,11 +1,13 @@
 'use strict';
 
+const chalk = require('chalk');
 const BundleAnalyzerPlugin =
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const DuplicatePackageCheckerPlugin = require('@cerner/duplicate-package-checker-webpack-plugin');
-const licenseCheckerOutputWriter = require('./licenseCheckerOutputWriter');
-const LicenseCheckerWebpackPlugin = require('license-checker-webpack-plugin');
+const licenseOutputWriter = require('./licenseOutputWriter');
+const LicenseWebpackPlugin =
+  require('license-webpack-plugin').LicenseWebpackPlugin;
 
 const refinedPlugins = (plugins, config, { env }) => {
   const isEnvProduction = env === 'production';
@@ -19,12 +21,26 @@ const refinedPlugins = (plugins, config, { env }) => {
         failOnError: true,
       }),
     isEnvProduction &&
-      new LicenseCheckerWebpackPlugin({
-        filter:
-          /(^.*[/\\]node_modules[/\\]((?:@[^/\\]+[/\\])?(?:[^@/\\][^/\\]*)))/,
-        outputWriter: licenseCheckerOutputWriter,
-        emitError: true,
-        ...config.settings.licenseChecker,
+      new LicenseWebpackPlugin({
+        stats: {
+          warnings: false,
+          errors: true,
+        },
+        perChunkOutput: false,
+        skipChildCompilers: true,
+        outputFilename: 'license-summary.txt',
+        handleUnacceptableLicense: (packageName, licenseType) => {
+          throw Error(
+            chalk.red(
+              `Unacceptable license found for ${packageName}: ${licenseType}`
+            )
+          );
+        },
+        handleMissingLicenseType: packageName => {
+          throw Error(chalk.red(`No license found for ${packageName}.`));
+        },
+        renderLicenses: licenseOutputWriter,
+        ...config.settings.licensePlugin,
       }),
     new DuplicatePackageCheckerPlugin({
       alwaysEmitErrorsFor: ['react', 'react-router'],

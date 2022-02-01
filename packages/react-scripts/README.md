@@ -5,10 +5,10 @@
 - Added `less-loader`
 - Added report of build time and entry size after build
 - Added following webpack plugins
-  - BundleAnalyzerPlugin
-  - CircularDependencyPlugin
-  - DuplicatePackageCheckerPlugin
-  - LicenseCheckerWebpackPlugin
+  - BundleAnalyzerPlugin (https://github.com/webpack-contrib/webpack-bundle-analyzer)
+  - CircularDependencyPlugin (https://github.com/aackerman/circular-dependency-plugin)
+  - DuplicatePackageCheckerPlugin (https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin)
+  - LicenseWebpackPlugin (https://github.com/xz64/license-webpack-plugin)
 - Added functionality to extend webpack plugins and rules
 - Added split config für vendor chunk (including all files from node_modules)
 
@@ -33,14 +33,19 @@ You need to update the default `src/react-app-env.d.ts` to use `react-scripts-re
 
 ```js
 // <root>/react-scripts-refined.config.js
+const satisfies = require('spdx-satisfies');
+
 module.exports = ({ env, isEnvProduction, isEnvDevelopment, paths }) => ({
   settings: {
     /**
-     * https://github.com/Microsoft/license-checker-webpack-plugin
-     * @var LicenseCheckerWebpackPluginOptions
+     * https://github.com/xz64/license-webpack-plugin/blob/HEAD/DOCUMENTATION.md
      */
-    licenseChecker: {
-      allow: '(Apache-2.0 OR BSD-2-Clause OR BSD-3-Clause OR MIT)',
+    licensePlugin: {
+      unacceptableLicenseTest: licenseType =>
+        !satisfies(
+          licenseType,
+          '(Apache-2.0 OR BSD-2-Clause OR BSD-3-Clause OR MIT)'
+        ),
     },
     /**
      * Settings for the 'less-loader' rule.
@@ -49,6 +54,11 @@ module.exports = ({ env, isEnvProduction, isEnvDevelopment, paths }) => ({
     lessLoader: {},
   },
   webpack: {
+    /**
+     * Define Webpack reolve.alias here.
+     * https://webpack.js.org/configuration/resolve/#resolvealias
+     */
+    alias: {},
     /**
      * Any additional WebpackRule can be added here.
      */
