@@ -1,12 +1,13 @@
 'use strict';
 
 const chalk = require('chalk');
+const webpack = require('webpack');
+const logUpdate = require('log-update');
 const BundleAnalyzerPlugin =
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const DuplicatePackageCheckerPlugin = require('@cerner/duplicate-package-checker-webpack-plugin');
 const licenseOutputWriter = require('./licenseOutputWriter');
-const satisfies = require('spdx-satisfies');
 const LicenseWebpackPlugin =
   require('license-webpack-plugin').LicenseWebpackPlugin;
 
@@ -15,6 +16,17 @@ const refinedPlugins = (plugins, config, { env }) => {
 
   plugins = [
     ...plugins,
+    new webpack.ProgressPlugin((percentage, message, info) => {
+      if (percentage >= 1) {
+        logUpdate.clear();
+      } else {
+        logUpdate(
+          `${chalk.cyan(
+            `${message} (${Math.round(percentage * 100) + '%'})`
+          )} ${chalk.dim(info)}`
+        );
+      }
+    }),
     isEnvProduction && new BundleAnalyzerPlugin(),
     isEnvProduction &&
       new CircularDependencyPlugin({

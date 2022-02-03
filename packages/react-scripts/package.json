@@ -59,6 +59,7 @@
     "jest-watch-typeahead": "^1.0.0",
     "less-loader": "^10.2.0",
     "license-webpack-plugin": "^4.0.1",
+    "log-update": "^4.0.0",
     "mini-css-extract-plugin": "^2.5.3",
     "postcss": "^8.4.5",
     "postcss-flexbugs-fixes": "^5.0.2",
