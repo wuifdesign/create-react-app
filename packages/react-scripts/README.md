@@ -21,6 +21,17 @@ npx create-react-app my-app --scripts-version react-scripts-refined
 npx create-react-app my-app --template typescript --scripts-version react-scripts-refined
 ```
 
+If you want to use it with Webstorm you may need to use the name `react-scripts` because of the default jest mapping.
+
+```
+{
+  ...
+  "devDependencies": {
+    "react-scripts": "npm:react-scripts-refined@^0.0.10",
+  },
+}
+```
+
 ### Use with Typescript
 
 You need to update the default `src/react-app-env.d.ts` to use `react-scripts-refined` instead of `react-scripts`.
