@@ -1,6 +1,7 @@
 'use strict';
 
 const deepClone = require('./deepClone');
+const useSWC = require('./useSWC');
 
 const lessRegex = /\.less$/;
 const lessModuleRegex = /\.module\.less$/;
@@ -96,6 +97,8 @@ const getLessRules = (rules, config, { env }) => {
 
 const refinedRules = (rules, config, { env }) => {
   const lastRules = rules.splice(-1);
+  rules = useSWC(rules, config);
+
   return [
     ...rules,
     ...getLessRules(rules, config, { env }),

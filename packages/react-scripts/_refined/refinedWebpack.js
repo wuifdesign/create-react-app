@@ -18,6 +18,7 @@ const config = (() => {
 })();
 
 const defaultConfig = {
+  useSWCLoader: false,
   settings: {
     licensePlugin: {
       unacceptableLicenseTest: licenseType =>

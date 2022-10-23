@@ -47,6 +47,10 @@ You need to update the default `src/react-app-env.d.ts` to use `react-scripts-re
 const satisfies = require('spdx-satisfies');
 
 module.exports = ({ env, isEnvProduction, isEnvDevelopment, paths }) => ({
+  /**
+   * If true or a config object, the SWC Loader is used instead of Babel (default: false)
+   */
+  swcLoader: false, // { jsc: { experimental: { plugins: [ ... ] } } } (https://swc.rs/docs/configuration/compilation)
   settings: {
     /**
      * https://github.com/xz64/license-webpack-plugin/blob/HEAD/DOCUMENTATION.md
