@@ -1,6 +1,6 @@
 # Improvements added to `react-scripts-refined`
 
-**Based on `react-scripts@5.0.0`**
+**Based on `react-scripts@5.0.1`**
 
 - Added `less-loader`
 - Added report of build time and entry size after build
@@ -11,6 +11,7 @@
   - LicenseWebpackPlugin (https://github.com/xz64/license-webpack-plugin)
 - Added functionality to extend webpack plugins and rules
 - Added split config für vendor chunk (including all files from node_modules)
+- Added possibility to replace `babel-loader` with `swc-loader`
 
 ### Create a new project with `react-script-refined`
 
