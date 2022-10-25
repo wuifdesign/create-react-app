@@ -1,5 +1,9 @@
 {
   "reject": [
-    "log-update"
+    "camelcase",
+    "log-update",
+    "pretty-ms",
+    "react",
+    "react-dom"
   ]
 }
